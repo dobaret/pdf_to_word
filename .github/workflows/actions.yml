@@ -29,7 +29,7 @@ jobs:
       - name: Passer le fichier PDF en tant que variable d'environnement
         run: echo "PDF_FILE=${{ inputs.pdf_file }}" >> $GITHUB_ENV
 
-      - name: Exécution du script Python (peut-être long) # run main.py
+      - name: Exécution du script Python (peut être long) # run main.py
         run: python pdf_to_word.py
 
       - name: Sauvegarde du fichier Word # run main.py
