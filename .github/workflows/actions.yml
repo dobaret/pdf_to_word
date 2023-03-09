@@ -1,0 +1,38 @@
+name: Convertir un PDF en Word
+
+on:
+  workflow_dispatch:
+    inputs:
+      pdf_file:
+        description: "Nom du fichier (obligatoire)"
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du contenu du repo
+        uses: actions/checkout@v3 # checkout the repository content
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Setup de Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # install the python version needed
+
+      - name: Installation des packages Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Passer le fichier PDF en tant que variable d'environnement
+        run: echo "PDF_FILE=${{ inputs.pdf_file }}" >> $GITHUB_ENV
+
+      - name: Exécution du script Python (peut-être long) # run main.py
+        run: python pdf_to_word.py
+
+      - name: Sauvegarde du fichier Word # run main.py
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Fichier Word converti - ${{ env.PDF_FILE }}
